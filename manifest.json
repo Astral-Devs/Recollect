@@ -1,0 +1,42 @@
+{
+  "manifest_version": 3,
+  "name": "Recollect",
+  "version": "0.2.2",
+  "description": "Semantic search for your browsing history — fully offline with local embeddings.",
+  "permissions": ["history", "storage", "tabs", "offscreen"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "src/popup/index.html",
+    "default_title": "Recollect"
+  },
+  "options_page": "src/options/index.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "open-search": {
+      "suggested_key": {
+        "default": "Ctrl+K",
+        "mac": "Command+K"
+      },
+      "description": "Open Recollect search"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["models/**", "wasm/**"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}
